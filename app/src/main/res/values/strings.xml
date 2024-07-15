@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Compass</string>
+    <string name="search">Search</string>
+    <string name="whoops">Whoops, try again!</string>
+</resources>
