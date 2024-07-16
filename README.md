@@ -9,13 +9,13 @@ The solution is structured based on Clean Architecture principles, mainly focus 
 
 The application implement the Repository pattern, dependency injections.
 
-Pros of Clear Architecture:
+Pros of Clean Architecture:
 - Separation of concerns: separates ui logic, business rules, and data operations.
 - Testability: each layer can be tested independently.
 - Scalability: easy to scale and maintain, making changes in one layer does not affect the other layers.
 - Maintainability: reduces coupling, making it easier to maintain and extend the application.
 - Reusability: the domain layer encapsulates the core business logic and use cases of the application. These are  not tied to any specific UI framework, database, or external service.
 
-Cons of Clear Architecture:
+Cons of Clean Architecture:
 - Complexity: the architecture can be complex for small applications and has boilerplate code.
 - Over-engineering: can be overkill for small applications.
