@@ -1,4 +1,4 @@
-package com.valoy.compass.presentation.search
+package com.valoy.compass.presentation.screens.search
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -49,7 +49,7 @@ fun SearchScreen(onNavigate: () -> Unit, viewModel: SearchViewModel = hiltViewMo
         ) {
             TitleText()
             SearchButton(!uiState.isLoading, onSearchClick)
-            Navigate(uiState.shouldNavigate, onSuccessfulNav)
+            Navigate(uiState.isSuccessful, onSuccessfulNav)
             ProgressIndicator(uiState.isLoading)
         }
     }

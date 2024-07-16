@@ -4,6 +4,8 @@ import app.cash.turbine.turbineScope
 import com.valoy.compass.CoroutineMainDispatcherRule
 import com.valoy.compass.domain.models.Emoji
 import com.valoy.compass.domain.repository.LocalEmojiRepository
+import com.valoy.compass.presentation.screens.result.ResultUiState
+import com.valoy.compass.presentation.screens.result.ResultViewModel
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.collections.immutable.toImmutableList
@@ -52,6 +54,42 @@ class ResultViewModelTest {
             val initial = state.awaitItem()
             val error = state.awaitItem()
 
+            assertEquals(INITIAL_STATE, initial)
+            assertEquals(ERROR_STATE, error)
+        }
+    }
+
+    @Test
+    fun `onTabClick invoked`() = testCoroutineScope.runTest {
+        setUp()
+
+        coEvery { localEmojiRepository.getAllCategories() } returns CATEGORIES
+        coEvery { localEmojiRepository.getAllByCategory(CATEGORY) } returns EMOJIS
+
+        viewModel.onTabClick(0)
+
+        turbineScope {
+            val state = viewModel.uiState.testIn(backgroundScope)
+            val initial = state.awaitItem()
+            val categories = state.awaitItem()
+            assertEquals(INITIAL_STATE, initial)
+            assertEquals(CATEGORIES_STATE, categories)
+        }
+    }
+
+    @Test
+    fun `onTabClick invoked with error`() = testCoroutineScope.runTest {
+        setUp()
+
+        coEvery { localEmojiRepository.getAllCategories() } throws Exception()
+        coEvery { localEmojiRepository.getAllByCategory(CATEGORY) } throws Exception()
+
+        viewModel.onTabClick(0)
+
+        turbineScope {
+            val state = viewModel.uiState.testIn(backgroundScope)
+            val initial = state.awaitItem()
+            val error = state.awaitItem()
             assertEquals(INITIAL_STATE, initial)
             assertEquals(ERROR_STATE, error)
         }

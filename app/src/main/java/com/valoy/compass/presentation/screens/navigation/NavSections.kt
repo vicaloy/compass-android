@@ -1,4 +1,4 @@
-package com.valoy.compass.presentation.navigation
+package com.valoy.compass.presentation.screens.navigation
 
 enum class NavSections(section: String) {
     EMOJI_RESULT("result"),

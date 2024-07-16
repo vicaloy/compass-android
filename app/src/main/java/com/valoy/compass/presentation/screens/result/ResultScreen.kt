@@ -1,4 +1,4 @@
-package com.valoy.compass.presentation.result
+package com.valoy.compass.presentation.screens.result
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -38,67 +38,64 @@ fun ResultScreen(viewModel: ResultViewModel = hiltViewModel()) {
                 .padding(dp_16)
                 .fillMaxSize(),
         ) {
-
-            uiState.categories?.let { categories ->
-                Tabs(categories, selectedTabIndex) { index ->
-                    selectedTabIndex = index
-                    viewModel.onTabClick(index)
-                }
+            Tabs(categories = uiState.categories, selectedTabIndex = selectedTabIndex) { index ->
+                selectedTabIndex = index
+                viewModel.onTabClick(index)
             }
-
-            uiState.items?.let { items ->
-                EmojiList(items)
-            }
-
-            SearchAgainText(uiState.categories)
+            EmojiList(items = uiState.items)
+            TryAgainText(uiState.hasError)
         }
     }
 }
 
 @Composable
-private fun SearchAgainText(categories: ImmutableList<String>?) {
-    if (categories == null) {
-        Text(text = stringResource(id = R.string.search_again))
+private fun TryAgainText(shouldShow: Boolean) {
+    if (shouldShow) {
+        Text(text = stringResource(id = R.string.error))
     }
 }
 
 @Composable
 private fun Tabs(
-    categories: ImmutableList<String>,
+    categories: ImmutableList<String>?,
     selectedTabIndex: Int = 0,
     onSelectedTabChange: (Int) -> Unit,
 ) {
-    ScrollableTabRow(
-        selectedTabIndex = selectedTabIndex,
-        contentColor = Color.Black,
-        indicator = { tabPositions ->
-            TabRowDefaults.PrimaryIndicator(
-                modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
-                color = Color.Black
-            )
-        }
-    ) {
-        categories.forEachIndexed { index, category ->
-            Tab(
-                selected = selectedTabIndex == index,
-                onClick = { onSelectedTabChange(index) },
-                text = { Text(text = category) }
-            )
+    categories?.let { cats ->
+        ScrollableTabRow(
+            selectedTabIndex = selectedTabIndex,
+            contentColor = Color.Black,
+            indicator = { tabPositions ->
+                TabRowDefaults.PrimaryIndicator(
+                    modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
+                    color = Color.Black
+                )
+            }
+        ) {
+            cats.forEachIndexed { index, category ->
+                Tab(
+                    selected = selectedTabIndex == index,
+                    onClick = { onSelectedTabChange(index) },
+                    text = { Text(text = category) }
+                )
+            }
         }
     }
 }
 
 @Composable
 private fun EmojiList(
-    items: ImmutableList<String>,
+    items: ImmutableList<String>?,
     modifier: Modifier = Modifier
 ) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(4),
-        modifier = modifier
-    ) {
-        items(items.size) { index ->
-            Text(text = items[index])
+    items?.let { emojis ->
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(4),
+            modifier = modifier
+        ) {
+            items(emojis.size) { index ->
+                Text(text = emojis[index])
+            }
         }
     }
 }

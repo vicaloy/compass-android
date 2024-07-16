@@ -1,4 +1,4 @@
-package com.valoy.compass.presentation.search
+package com.valoy.compass.presentation.screens.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -31,17 +31,17 @@ class SearchViewModel @Inject constructor(
                     }
 
                     _uiState.update {
-                        it.copy(isLoading = false, shouldNavigate = true)
+                        it.copy(isLoading = false, isSuccessful = true)
                     }
                 },
                 catchBlock = {
-                    _uiState.update { it.copy(shouldNavigate = false, isLoading = false) }
+                    _uiState.update { it.copy(isSuccessful = false, isLoading = false) }
                 }
             )
         }
     }
 
     fun consumeAction() {
-        _uiState.update { it.copy(shouldNavigate = null) }
+        _uiState.update { it.copy(isSuccessful = null) }
     }
 }

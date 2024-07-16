@@ -1,10 +1,12 @@
-package com.valoy.compass.presentation.result
+package com.valoy.compass.presentation.screens.result
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.valoy.compass.di.IoDispatcher
 import com.valoy.compass.domain.models.Emoji
 import com.valoy.compass.domain.repository.LocalEmojiRepository
+import com.valoy.compass.presentation.exceptions.CategoriesNotFoundException
+import com.valoy.compass.presentation.exceptions.EmojisNotFoundException
 import com.valoy.compass.util.tryCatch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
@@ -24,8 +26,6 @@ class ResultViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(ResultUiState())
     val uiState = _uiState
 
-    private val categories = mutableListOf<String>()
-
     init {
         getEmojis()
     }
@@ -34,26 +34,36 @@ class ResultViewModel @Inject constructor(
         viewModelScope.launch(dispatcher) {
             tryCatch(
                 tryBlock = {
+                    val categories = getCategories()
                     val category = categories[index]
-                    val emojis =
-                        localEmojiRepository.getAllByCategory(category)
-                    showEmojis(emojis)
+                    val emojis = getEmojisByCategory(category)
+                    showCategoriesEmojis(emojis, categories)
                 },
                 catchBlock = {
                     _uiState.update { it.copy(hasError = true) }
                 }
             )
         }
+    }
+
+    private suspend fun getEmojisByCategory(category: String) =
+        (localEmojiRepository.getAllByCategory(category).takeIf { it.isNotEmpty() }
+            ?: throw EmojisNotFoundException())
+
+    private suspend fun getCategories(): List<String> {
+        val categories =
+            localEmojiRepository.getAllCategories().takeIf { it.isNotEmpty() }
+                ?: throw CategoriesNotFoundException()
+        return categories
     }
 
     private fun getEmojis() {
         viewModelScope.launch(dispatcher) {
             tryCatch(
                 tryBlock = {
-                    categories.addAll(localEmojiRepository.getAllCategories())
-                    val emojis =
-                        localEmojiRepository.getAllByCategory(categories.firstOrNull() ?: "")
-                    showCategoriesEmojis(emojis)
+                    val categories = getCategories()
+                    val emojis = getEmojisByCategory(categories.firstOrNull() ?: "")
+                    showCategoriesEmojis(emojis, categories)
                 },
                 catchBlock = {
                     _uiState.update { it.copy(hasError = true) }
@@ -62,18 +72,12 @@ class ResultViewModel @Inject constructor(
         }
     }
 
-    private fun showCategoriesEmojis(emojis: List<Emoji>) {
+    private fun showCategoriesEmojis(emojis: List<Emoji>, categories: List<String>) {
         _uiState.update {
             it.copy(
                 items = mapUnicodes(emojis),
                 categories = categories.toImmutableList()
             )
-        }
-    }
-
-    private fun showEmojis(emojis: List<Emoji>) {
-        _uiState.update {
-            it.copy(items = mapUnicodes(emojis))
         }
     }
 

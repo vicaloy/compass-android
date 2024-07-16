@@ -8,7 +8,7 @@ import com.valoy.compass.infra.database.entity.EmojiEntity
 
 @Dao
 interface EmojiDAO {
-    @Query("SELECT DISTINCT category FROM emojis")
+    @Query("SELECT DISTINCT category FROM emojis ORDER BY category ASC")
     suspend fun getAllCategories(): List<String>
 
     @Query("SELECT * FROM emojis WHERE category = :category")

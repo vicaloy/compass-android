@@ -1,11 +1,11 @@
-package com.valoy.compass.presentation.navigation
+package com.valoy.compass.presentation.screens.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.valoy.compass.presentation.result.ResultScreen
-import com.valoy.compass.presentation.search.SearchScreen
+import com.valoy.compass.presentation.screens.result.ResultScreen
+import com.valoy.compass.presentation.screens.search.SearchScreen
 
 @Composable
 fun Navigation() {

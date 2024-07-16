@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.valoy.compass.presentation.navigation.Navigation
+import com.valoy.compass.presentation.screens.navigation.Navigation
 import com.valoy.compass.presentation.theme.CompassTheme
 import dagger.hilt.android.AndroidEntryPoint
 

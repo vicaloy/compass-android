@@ -1,4 +1,4 @@
-package com.valoy.compass.presentation.result
+package com.valoy.compass.presentation.screens.result
 
 import androidx.compose.runtime.Stable
 import kotlinx.collections.immutable.ImmutableList
