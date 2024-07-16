@@ -31,8 +31,8 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun `onSearchClick invoked with network`() = testCoroutineScope.runTest {
-        viewModel.onSearchClick(isNetworkAvailable = true)
+    fun `onSearchClick invoked`() = testCoroutineScope.runTest {
+        viewModel.onSearchClick()
 
         turbineScope {
             val state = viewModel.uiState.testIn(backgroundScope)
@@ -49,36 +49,20 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun `onSearchClick invoked without network`() = testCoroutineScope.runTest {
-        viewModel.onSearchClick(isNetworkAvailable = false)
-
-        turbineScope {
-            val state = viewModel.uiState.testIn(backgroundScope)
-            val initial = state.awaitItem()
-            val navigate = state.awaitItem()
-
-            assertEquals(INITIAL_STATE, initial)
-            assertEquals(NAVIGATE_STATE, navigate)
-        }
-
-        coVerify(exactly = 0) { searchUseCase() }
-    }
-
-    @Test
     fun `onSearchClick invoked with error`() = testCoroutineScope.runTest {
         coEvery{ searchUseCase() } throws Exception()
 
-        viewModel.onSearchClick(isNetworkAvailable = true)
+        viewModel.onSearchClick()
 
         turbineScope {
             val state = viewModel.uiState.testIn(backgroundScope)
             val initial = state.awaitItem()
             val loading = state.awaitItem()
-            val error = state.awaitItem()
+            val navigate = state.awaitItem()
 
             assertEquals(INITIAL_STATE, initial)
             assertEquals(LOADING_STATE, loading)
-            assertEquals(ERROR_STATE, error)
+            assertEquals(NAVIGATE_STATE, navigate)
         }
 
         coVerify(exactly = 1) { searchUseCase() }
@@ -99,19 +83,15 @@ class SearchViewModelTest {
     private companion object {
         val INITIAL_STATE = SearchUiState(
             isLoading = false,
-            isSuccessful = null,
+            shouldNav = null,
         )
         val LOADING_STATE = SearchUiState(
             isLoading = true,
-            isSuccessful = null,
+            shouldNav = null,
         )
         val NAVIGATE_STATE = SearchUiState(
             isLoading = false,
-            isSuccessful = true,
-        )
-        val ERROR_STATE = SearchUiState(
-            isLoading = false,
-            isSuccessful = false,
+            shouldNav = true,
         )
     }
 }

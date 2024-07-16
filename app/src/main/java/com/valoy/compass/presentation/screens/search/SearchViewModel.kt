@@ -21,27 +21,29 @@ class SearchViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(SearchUiState())
     val uiState = _uiState
 
-    fun onSearchClick(isNetworkAvailable: Boolean) {
+    fun onSearchClick() {
         viewModelScope.launch(dispatcher) {
             tryCatch(
                 tryBlock = {
-                    if(isNetworkAvailable){
-                        _uiState.update { it.copy(isLoading = true) }
-                        searchUseCase()
-                    }
+                    _uiState.update { it.copy(isLoading = true) }
+                    searchUseCase()
 
-                    _uiState.update {
-                        it.copy(isLoading = false, isSuccessful = true)
-                    }
+                    updateNavigate()
                 },
                 catchBlock = {
-                    _uiState.update { it.copy(isSuccessful = false, isLoading = false) }
+                    updateNavigate()
                 }
             )
         }
     }
 
+    private fun updateNavigate() {
+        _uiState.update {
+            it.copy(isLoading = false, shouldNav = true)
+        }
+    }
+
     fun consumeAction() {
-        _uiState.update { it.copy(isSuccessful = null) }
+        _uiState.update { it.copy(shouldNav = null, isLoading = false) }
     }
 }

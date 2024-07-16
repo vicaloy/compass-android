@@ -5,5 +5,5 @@ import androidx.compose.runtime.Stable
 @Stable
 data class SearchUiState(
     val isLoading: Boolean = false,
-    val isSuccessful: Boolean? = null,
+    val shouldNav: Boolean? = null,
 )

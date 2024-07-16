@@ -14,28 +14,24 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.valoy.compass.R
 import com.valoy.compass.presentation.theme.dp_16
-import com.valoy.compass.util.isNetworkAvailable
 
 @Composable
 fun SearchScreen(onNavigate: () -> Unit, viewModel: SearchViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val isNetworkAvailable = isNetworkAvailable(context)
     val onSearchClick: () -> Unit = remember(viewModel) {
         {
-            viewModel.onSearchClick(isNetworkAvailable)
+            viewModel.onSearchClick()
         }
     }
     val onSuccessfulNav: () -> Unit = remember(viewModel) {
         {
-            onNavigate()
             viewModel.consumeAction()
+            onNavigate()
         }
     }
 
@@ -49,7 +45,7 @@ fun SearchScreen(onNavigate: () -> Unit, viewModel: SearchViewModel = hiltViewMo
         ) {
             TitleText()
             SearchButton(!uiState.isLoading, onSearchClick)
-            Navigate(uiState.isSuccessful, onSuccessfulNav)
+            Navigate(uiState.shouldNav, onSuccessfulNav)
             ProgressIndicator(uiState.isLoading)
         }
     }
