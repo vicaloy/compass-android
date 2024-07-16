@@ -13,3 +13,4 @@
 /.gradle/config.properties
 /.gradle/file-system.probe
 /app/build/*
+/.gradle/8.6/*

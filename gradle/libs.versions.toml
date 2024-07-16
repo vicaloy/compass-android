@@ -45,6 +45,7 @@ retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = 
 retrofit-converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
 moshi = { group = "com.squareup.moshi", name = "moshi-kotlin", version = "1.15.1" }
 okhttp = { group = "com.squareup.okhttp3", name = "logging-interceptor", version = "5.0.0-alpha.14" }
+kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version = "0.3.7" }
 
 
 [plugins]

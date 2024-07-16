@@ -2,13 +2,12 @@ package com.valoy.compass.di
 
 import android.app.Application
 import android.content.Context
-import com.valoy.compass.domain.repository.EmojiRepository
+import com.valoy.compass.domain.repository.RemoteEmojiRepository
 import com.valoy.compass.domain.repository.LocalEmojiRepository
-import com.valoy.compass.domain.repository.SessionRepository
-import com.valoy.compass.infra.EmojiHubAPI
+import com.valoy.compass.infra.service.EmojiHubApi
 import com.valoy.compass.infra.database.dao.EmojiDAO
-import com.valoy.compass.infra.repository.RemoteEmojiRepository
-import com.valoy.compass.infra.repository.RoomEmojiRepository
+import com.valoy.compass.infra.repository.ApiRemoteEmojiRepository
+import com.valoy.compass.infra.repository.RoomLocalEmojiRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,12 +25,12 @@ object AppModule {
     }
 
     @Provides
-    fun provideRemoteEmojiRepository(emojiHubAPI: EmojiHubAPI): EmojiRepository {
-        return RemoteEmojiRepository(emojiHubAPI)
+    fun provideRemoteEmojiRepository(emojiHubAPI: EmojiHubApi): RemoteEmojiRepository {
+        return ApiRemoteEmojiRepository(emojiHubAPI)
     }
 
     @Provides
     fun provideLocalEmojiRepository(emojiDAO: EmojiDAO): LocalEmojiRepository {
-        return RoomEmojiRepository(emojiDAO)
+        return RoomLocalEmojiRepository(emojiDAO)
     }
 }

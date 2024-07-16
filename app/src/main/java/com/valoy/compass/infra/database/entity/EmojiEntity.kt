@@ -7,13 +7,11 @@ import com.valoy.compass.domain.models.Emoji
 
 @Entity(tableName = "emojis")
 data class EmojiEntity(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Long,
     @ColumnInfo(name = "category") val category: String,
-    @ColumnInfo(name = "unicode") val unicode: String,
+    @PrimaryKey @ColumnInfo(name = "unicode") val unicode: String,
 ) {
     companion object {
         fun fromModel(emoji: Emoji) = EmojiEntity(
-            id = 0,
             category = emoji.category,
             unicode = emoji.unicode
         )

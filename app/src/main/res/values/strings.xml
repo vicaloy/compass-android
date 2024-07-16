@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Compass</string>
+    <string name="search_title">Search emojis 🎉🎉🕺💃</string>
     <string name="search">Search</string>
+    <string name="search_again">Whoops, go back and search again with internet connection!</string>
     <string name="whoops">Whoops, try again!</string>
+    <string name="arrow_icon">Arrow icon</string>
 </resources>

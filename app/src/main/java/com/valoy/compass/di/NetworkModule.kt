@@ -2,7 +2,7 @@ package com.valoy.compass.di
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.valoy.compass.infra.EmojiHubAPI
+import com.valoy.compass.infra.service.EmojiHubApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -50,7 +50,7 @@ object NetworkModule {
     }
 
     @Provides
-    fun provideAPI(retrofit: Retrofit): EmojiHubAPI {
-        return retrofit.create(EmojiHubAPI::class.java)
+    fun provideAPI(retrofit: Retrofit): EmojiHubApi {
+        return retrofit.create(EmojiHubApi::class.java)
     }
 }

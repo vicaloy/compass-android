@@ -14,13 +14,14 @@ class CoroutineMainDispatcherRule(
     val dispatcher: TestDispatcher
 ) : TestRule {
 
-    override fun apply(base: Statement, description: Description): Statement = object : Statement() {
-        override fun evaluate() {
-            Dispatchers.setMain(dispatcher)
+    override fun apply(base: Statement, description: Description): Statement =
+        object : Statement() {
+            override fun evaluate() {
+                Dispatchers.setMain(dispatcher)
 
-            base.evaluate()
+                base.evaluate()
 
-            Dispatchers.resetMain()
+                Dispatchers.resetMain()
+            }
         }
-    }
 }

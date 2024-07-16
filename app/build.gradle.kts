@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -5,10 +8,23 @@ plugins {
     alias(libs.plugins.hilt)
 }
 
+fun loadProperties(path: String): Properties {
+    val properties = Properties()
+    val input = FileInputStream(path)
+    properties.load(input)
+    return properties
+}
+
+val localPropertiesFile = rootProject.file("local.properties")
+val localProperties = loadProperties(localPropertiesFile.absolutePath)
+
 android {
     namespace = "com.valoy.compass"
     compileSdk = 34
 
+    buildFeatures {
+        buildConfig = true
+    }
     defaultConfig {
         applicationId = "com.valoy.compass"
         minSdk = 24
@@ -29,6 +45,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "BASE_URL", localProperties.getProperty("RELEASE_BASE_URL"))
+        }
+        debug {
+            buildConfigField("String", "BASE_URL", localProperties.getProperty("DEBUG_BASE_URL"))
+
         }
     }
     compileOptions {
@@ -60,12 +81,13 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.kotlinx.collections.immutable)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation (libs.androidx.activity.ktx )
+    implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.datastore)
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.moshi)
@@ -74,8 +96,8 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
     testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation (libs.junit)
-    testImplementation (libs.mockk)
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
     testImplementation(libs.turbine)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

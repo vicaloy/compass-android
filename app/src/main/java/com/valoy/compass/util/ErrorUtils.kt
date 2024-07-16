@@ -10,6 +10,5 @@ suspend fun tryCatch(tryBlock: suspend () -> Unit, catchBlock: () -> Unit) {
         throw e
     } catch (e: Exception) {
         catchBlock()
-        Log.e("Exception", "Error occurred: ${e.message}", e)
     }
 }
