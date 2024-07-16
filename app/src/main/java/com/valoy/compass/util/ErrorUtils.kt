@@ -1,6 +1,5 @@
 package com.valoy.compass.util
 
-import android.util.Log
 import kotlinx.coroutines.CancellationException
 
 suspend fun tryCatch(tryBlock: suspend () -> Unit, catchBlock: () -> Unit) {
