@@ -2,6 +2,8 @@
 
 This Android app fetches a list of emojis from a REST API, displays them using Jetpack Compose, and stores them in a Room Database for offline access. The app uses Retrofit 2 for network requests, Hilt for dependency injection, Room for local storage, and MVVM architecture for state management.
 
+- 🔗 URL: https://emojihub.yurace.pro/api/all
+
 ## 🚀 Features
 
 - Emojis List from API:
